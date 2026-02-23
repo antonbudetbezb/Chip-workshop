@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Антон — Портфолио</title>
+  <style>
+    :root {
+      --bg-dark: #0a0e0c;
+      --bg-card: rgba(20, 35, 28, 0.6);
+      /* BMW Isle of Man Green inspired */
+      --green-600: #0d2818;
+      --green-500: #1e4d36;
+      --green-400: #2d6b4a;
+      --green-300: #3d8a5c;
+      --green-glow: rgba(45, 107, 74, 0.35);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(45, 107, 74, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a0e0c 0%, #0f1812 35%, #132018 70%, #0a0e0c 100%);
+      min-height: 100vh;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hero */
+    section.hero {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 0;
+      gap: 1.25rem;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-avatar {
+      width: 280px;
+      height: 280px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 3px solid var(--green-500);
+      box-shadow: 0 0 40px var(--green-glow);
+      flex-shrink: 0;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(90deg, #fff 0%, var(--green-300) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .title {
+      font-size: 1.125rem;
+      color: var(--green-400);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .hero .description {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      max-width: 36ch;
+    }
+
+    /* About */
+    section.about {
+      padding: 4rem 0;
+    }
+
+    section.about h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--green-400);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    section.about p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      max-width: 65ch;
+    }
+
+    section.about p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    /* Contacts */
+    section.contacts {
+      padding: 4rem 0 5rem;
+    }
+
+    section.contacts h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--green-400);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .contact-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      color: var(--green-300);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, color 0.2s ease;
+    }
+
+    .contact-list a:hover {
+      background: rgba(45, 107, 74, 0.25);
+      border-color: var(--green-400);
+      box-shadow: 0 0 24px var(--green-glow), 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: translateY(-3px);
+      color: var(--green-300);
+    }
+
+    .contact-list a:active {
+      transform: translateY(-1px);
+    }
+
+    .contact-list a.email::before { content: "✉"; }
+    .contact-list a.telegram::before { content: "✈"; }
+    .contact-list a.github::before { content: "⌗"; }
+    .contact-list a.linkedin::before { content: "in"; font-weight: 700; font-size: 0.8em; }
+
+    /* Decorative orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--green-500);
+      top: -150px;
+      right: -100px;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--green-600);
+      bottom: 20%;
+      left: -80px;
+    }
+
+    /* Entrance animations */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeSlideIn 0.7s ease forwards;
+    }
+
+    .hero .hero-avatar.animate-in { animation-delay: 0.08s; }
+    .hero .hero-text.animate-in { animation-delay: 0.18s; }
+    .hero .description.animate-in { animation-delay: 0.28s; }
+    .about h2.animate-in { animation-delay: 0.12s; }
+    .about p.animate-in { animation-delay: 0.22s; }
+    .about p.animate-in:nth-of-type(2) { animation-delay: 0.32s; }
+    .about p.animate-in:nth-of-type(3) { animation-delay: 0.42s; }
+    .contacts h2.animate-in { animation-delay: 0.15s; }
+    .contact-list.animate-in { animation-delay: 0.28s; }
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      .container { padding: 1.5rem 1rem; }
+      section.hero { min-height: 60vh; padding: 2rem 0; }
+      .hero-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .hero-avatar { width: 220px; height: 220px; border-radius: 16px; }
+      section.about, section.contacts { padding: 3rem 0; }
+      .contact-list { flex-direction: column; }
+      .contact-list a { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+
+  <main class="container">
+    <section class="hero" id="hero">
+      <div class="hero-top">
+        <img src="avatar.jpg" alt="Антон" class="hero-avatar animate-in" width="280" height="280">
+        <div class="hero-text animate-in">
+          <h1>Антон</h1>
+          <p class="title">Frontend-разработчик / Дизайнер интерфейсов</p>
+        </div>
+      </div>
+      <p class="description animate-in">Делаю удобные и быстрые веб-интерфейсы. Интересуюсь типографикой, анимациями и минималистичным дизайном.</p>
+    </section>
+
+    <section class="about" id="about">
+      <h2 class="animate-in">О себе</h2>
+      <p class="animate-in">
+        Работаю в веб-разработке: от вёрстки до интерактивных приложений. Фокус на пользовательском опыте и чистом коде. Люблю доводить идеи до работающего продукта.
+      </p>
+      <p class="animate-in">
+        В свободное время пробую новые технологии, читаю про продукт и дизайн-системы. Считаю, что хороший интерфейс не отвлекает, а помогает решать задачи.
+      </p>
+      <p class="animate-in">
+        Открыт к совместным проектам и интересным задачам. Если есть идея или вопрос — напишите.
+      </p>
+    </section>
+
+    <section class="contacts" id="contacts">
+      <h2 class="animate-in">Контакты</h2>
+      <ul class="contact-list animate-in">
+        <li><a href="mailto:your@email.com" class="email">your@email.com</a></li>
+        <li><a href="https://t.me/your_username" target="_blank" rel="noopener" class="telegram">Telegram</a></li>
+        <li><a href="https://github.com/your_username" target="_blank" rel="noopener" class="github">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/your_username" target="_blank" rel="noopener" class="linkedin">LinkedIn</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var canvas = document.getElementById('particles');
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var mouse = { x: -1e4, y: -1e4 };
+      var clicks = [];
+      var cursorRadius = 32;
+      var cursorStrength = 2.2;
+      var clickStrength = 52;
+      var clickRadius = 48;
+      var count = 1320;
+      var homeBlend = 0.90;
+      var homeDrift = 0.12;
+      var green = { r: 45, g: 107, b: 74 };
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
+      }
+
+      function initParticles() {
+        var w = canvas.width;
+        var h = canvas.height;
+        var cx = w * 0.5;
+        var cy = h * 0.5;
+        particles = [];
+        for (var i = 0; i < count; i++) {
+          var ox = cx + (Math.random() - 0.5) * w * 0.72;
+          var oy = cy + (Math.random() - 0.5) * h * 0.72;
+          var phase = Math.random() * Math.PI * 2;
+          var phase2 = Math.random() * Math.PI * 2;
+          var driftAmp = 0.014 + Math.random() * 0.022;
+          particles.push({
+            x: ox,
+            y: oy,
+            ox: ox,
+            oy: oy,
+            vx: 0,
+            vy: 0,
+            phase: phase,
+            phase2: phase2,
+            phaseSpeed: 0.004 + Math.random() * 0.008,
+            driftAmp: driftAmp
+          });
+        }
+      }
+
+      function addClick(x, y) {
+        clicks.push({ x: x, y: y, t: 0 });
+      }
+
+      function repulseFrom(px, py, cx, cy, strength, radius) {
+        var dx = px - cx;
+        var dy = py - cy;
+        var d = Math.sqrt(dx * dx + dy * dy) || 0.1;
+        if (d > radius) return null;
+        var f = (1 - d / radius) * strength / d;
+        return { vx: dx * f, vy: dy * f };
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0; i < clicks.length; i++) {
+          clicks[i].t++;
+          if (clicks[i].t > 35) { clicks.splice(i, 1); i--; continue; }
+        }
+
+        for (var i = 0; i < particles.length; i++) {
+          var p = particles[i];
+
+          var dx = p.ox - p.x;
+          var dy = p.oy - p.y;
+          var dist = Math.sqrt(dx * dx + dy * dy) || 0.01;
+          var driftSpeed = Math.min(0.35, dist * 0.018);
+          p.vx = p.vx * homeBlend + (dx / dist) * driftSpeed * homeDrift;
+          p.vy = p.vy * homeBlend + (dy / dist) * driftSpeed * homeDrift;
+
+          p.phase += p.phaseSpeed;
+          p.phase2 += p.phaseSpeed * 0.6;
+          var driftX = Math.cos(p.phase) * p.driftAmp + Math.sin(p.phase2) * p.driftAmp * 0.4;
+          var driftY = Math.sin(p.phase * 0.8 + 1.2) * p.driftAmp + Math.cos(p.phase2 * 0.9) * p.driftAmp * 0.4;
+          p.vx += driftX;
+          p.vy += driftY;
+
+          var fromCursor = repulseFrom(p.x, p.y, mouse.x, mouse.y, cursorStrength, cursorRadius);
+          if (fromCursor) {
+            p.vx += fromCursor.vx;
+            p.vy += fromCursor.vy;
+          }
+
+          for (var c = 0; c < clicks.length; c++) {
+            var cl = clicks[c];
+            var decay = 1 - cl.t / 35;
+            var fromClick = repulseFrom(p.x, p.y, cl.x, cl.y, clickStrength * decay, clickRadius);
+            if (fromClick) {
+              p.vx += fromClick.vx;
+              p.vy += fromClick.vy;
+            }
+          }
+
+          p.vx *= 0.92;
+          p.vy *= 0.92;
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -0.6;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -0.6;
+          p.x = Math.max(0, Math.min(canvas.width, p.x));
+          p.y = Math.max(0, Math.min(canvas.height, p.y));
+
+          var alpha = 0.45 + 0.35 * Math.random();
+          ctx.fillStyle = 'rgba(' + green.r + ',' + green.g + ',' + green.b + ',' + alpha + ')';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 0.68, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      document.addEventListener('mousemove', function (e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      document.addEventListener('mouseleave', function (e) {
+        if (!e.relatedTarget || e.relatedTarget === document.body) {
+          mouse.x = -1e4;
+          mouse.y = -1e4;
+        }
+      });
+
+      document.addEventListener('click', function (e) {
+        addClick(e.clientX, e.clientY);
+      });
+
+      window.addEventListener('resize', resize);
+      resize();
+      tick();
+    })();
+  </script>
+</body>
+</html>
