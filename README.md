@@ -61,14 +61,18 @@ npx serve .
 
 ## Автодеплой на Vercel (main → production)
 
-Чтобы каждый пуш в ветку **main** автоматически выкатывался на Vercel:
+Создать новый проект на Vercel и привязать его к этому репозиторию (обновление **main** = автоматический деплой):
+
+**→ [Import Chip-workshop into Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fantonbudetbezb%2FChip-workshop)** — открой ссылку, войди через GitHub (если ещё не вошёл), нажми **Deploy**. Production branch по умолчанию — `main`.
+
+Либо вручную:
 
 1. Зайди на [vercel.com](https://vercel.com) и войди через **GitHub**.
 2. **Add New…** → **Project** → импортируй репозиторий **antonbudetbezb/Chip-workshop**.
-3. Оставь настройки по умолчанию (Root Directory: `.`, Build Command — пусто, Output: статика). Нажми **Deploy**.
-4. В настройках проекта: **Settings** → **Git** → убедись, что **Production Branch** = `main`.
+3. Оставь настройки по умолчанию (Root Directory: `.`, Build Command — пусто). Нажми **Deploy**.
+4. В настройках проекта: **Settings** → **Git** → проверь, что **Production Branch** = `main`.
 
-После этого каждый `git push origin main` будет запускать новый деплой; продовый URL будет в панели Vercel (и в комментариях к коммиту, если включена интеграция с GitHub).
+После деплоя продовый сайт будет по адресу вида **`https://chip-workshop-<твой-ник>.vercel.app`** (или свой домен в настройках проекта).
 
 ## Лицензия
 
