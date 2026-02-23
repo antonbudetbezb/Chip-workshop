@@ -232,6 +232,111 @@
       }
     }
 
+    /* Chatbot */
+    .chat-toggle {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--green-500);
+      border: 2px solid var(--green-400);
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px var(--green-glow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chat-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 32px var(--green-glow);
+    }
+    .chat-panel {
+      position: fixed;
+      bottom: 5rem;
+      right: 1.5rem;
+      width: 340px;
+      max-width: calc(100vw - 3rem);
+      height: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      z-index: 99;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+    .chat-panel.open { display: flex; }
+    .chat-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--green-400);
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .chat-msg {
+      max-width: 85%;
+      padding: 0.6rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+    .chat-msg.bot {
+      align-self: flex-start;
+      background: rgba(45, 107, 74, 0.25);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .chat-msg.user {
+      align-self: flex-end;
+      background: var(--green-500);
+      color: var(--text);
+    }
+    .chat-input-wrap {
+      padding: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .chat-input-wrap form {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 0.6rem 0.9rem;
+      background: rgba(10, 14, 12, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    .chat-input::placeholder { color: var(--text-muted); }
+    .chat-send {
+      padding: 0.6rem 1rem;
+      background: var(--green-500);
+      border: 1px solid var(--green-400);
+      border-radius: 8px;
+      color: var(--text);
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .chat-send:hover { background: var(--green-400); }
+
     /* Mobile */
     @media (max-width: 480px) {
       .container { padding: 1.5rem 1rem; }
@@ -241,6 +346,8 @@
       section.about, section.contacts { padding: 3rem 0; }
       .contact-list { flex-direction: column; }
       .contact-list a { justify-content: center; }
+      .chat-panel { bottom: 4.5rem; right: 1rem; left: 1rem; width: auto; height: 380px; }
+      .chat-toggle { bottom: 1rem; right: 1rem; }
     }
   </style>
 </head>
@@ -284,6 +391,18 @@
       </ul>
     </section>
   </main>
+
+  <div id="chat-panel" class="chat-panel" aria-label="Чат">
+    <div class="chat-header">Чат с Антоном</div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-wrap">
+      <form id="chat-form">
+        <input type="text" class="chat-input" id="chat-input" placeholder="Напишите сообщение..." autocomplete="off">
+        <button type="submit" class="chat-send">Отправить</button>
+      </form>
+    </div>
+  </div>
+  <button type="button" class="chat-toggle" id="chat-toggle" aria-label="Открыть чат">💬</button>
 
   <script>
     (function () {
@@ -427,6 +546,64 @@
       window.addEventListener('resize', resize);
       resize();
       tick();
+    })();
+
+    // Chatbot: knowledge from portfolio + one fact from the web (typography/minimal design)
+    (function () {
+      var panel = document.getElementById('chat-panel');
+      var toggle = document.getElementById('chat-toggle');
+      var messages = document.getElementById('chat-messages');
+      var form = document.getElementById('chat-form');
+      var input = document.getElementById('chat-input');
+
+      var knowledge = {
+        who: 'Антон — фронтенд-разработчик и дизайнер интерфейсов. Делаю удобные и быстрые веб-интерфейсы, интересуюсь типографикой, анимациями и минималистичным дизайном.',
+        services: 'Услуги: вёрстка, интерактивные веб-приложения, фокус на UX и чистом коде. От доведения идеи до работающего продукта до консультаций по интерфейсам.',
+        about: 'Работаю в веб-разработке: от вёрстки до интерактивных приложений. В свободное время пробую новые технологии, читаю про продукт и дизайн-системы. Открыт к совместным проектам.',
+        contacts: 'Контакты: email your@email.com, Telegram, GitHub, LinkedIn. Ссылки есть внизу страницы в разделе «Контакты».',
+        typographyFact: 'Дитер Рамс говорил: «Хороший дизайн — это как можно меньше дизайна». В минимализме типографика и пустое пространство несут основную смысловую нагрузку.'
+      };
+
+      var greetings = ['Привет! Чем могу помочь?', 'Здравствуйте! Спрашивайте что угодно — об мне, услугах или контактах.', 'Привет! Я тут, чтобы рассказать об Антоне и его работе.'];
+
+      function addMsg(text, isUser) {
+        var div = document.createElement('div');
+        div.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
+        div.textContent = text;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function getReply(q) {
+        var lower = (q || '').toLowerCase().trim();
+        if (!lower) return greetings[0];
+        if (/привет|здравств|хай|hello|hi/i.test(lower)) return greetings[Math.floor(Math.random() * greetings.length)];
+        if (/кто ты|кто такой|антон|об тебе|о себе|about|who/i.test(lower)) return knowledge.who;
+        if (/услуг|работ|делаешь|services|чем занимаешь|frontend|интерфейс/i.test(lower)) return knowledge.services;
+        if (/контакт|связаться|написать|email|telegram|github|linkedin/i.test(lower)) return knowledge.contacts;
+        if (/типографик|минимализм|дизайн|цитат|факт|quote|design|minimal/i.test(lower)) return knowledge.typographyFact;
+        if (/портфолио|сайт|проект/i.test(lower)) return 'Это портфолио-визитка Антона. Сайт в тёмной теме в стиле BMW Isle of Man Green, с анимацией частиц. Если нужны контакты или описание услуг — спросите «услуги» или «контакты».';
+        return 'Могу рассказать: кто такой Антон, какие услуги он предлагает, как с ним связаться (контакты), или поделиться фактом о типографике и минимализме. Напишите, например: «услуги» или «контакты».';
+      }
+
+      toggle.addEventListener('click', function () {
+        panel.classList.toggle('open');
+        if (panel.classList.contains('open') && messages.children.length === 0) {
+          addMsg('Привет! Я бот на этом сайте. Спросите об Антоне, его услугах или контактах — или о типографике и минимализме.', false);
+        }
+        input.focus();
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var text = input.value.trim();
+        if (!text) return;
+        addMsg(text, true);
+        input.value = '';
+        setTimeout(function () {
+          addMsg(getReply(text), false);
+        }, 400);
+      });
     })();
   </script>
 </body>
