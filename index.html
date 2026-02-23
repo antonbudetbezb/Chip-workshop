@@ -307,6 +307,24 @@
       background: var(--green-500);
       color: var(--text);
     }
+    .chat-typing {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .chat-typing span {
+      width: 6px;
+      height: 6px;
+      background: var(--green-400);
+      border-radius: 50%;
+      animation: chatTyping 1.2s ease-in-out infinite;
+    }
+    .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes chatTyping {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
     .chat-input-wrap {
       padding: 0.75rem;
       border-top: 1px solid var(--border);
@@ -548,23 +566,15 @@
       tick();
     })();
 
-    // Chatbot: knowledge from portfolio + one fact from the web (typography/minimal design)
+    // Chatbot: cursor-ai-chatbot (evgyur/cursor-ai-chatbot) — запросы к /api/chat (MiniMax)
     (function () {
       var panel = document.getElementById('chat-panel');
       var toggle = document.getElementById('chat-toggle');
       var messages = document.getElementById('chat-messages');
       var form = document.getElementById('chat-form');
       var input = document.getElementById('chat-input');
-
-      var knowledge = {
-        who: 'Антон — фронтенд-разработчик и дизайнер интерфейсов. Делаю удобные и быстрые веб-интерфейсы, интересуюсь типографикой, анимациями и минималистичным дизайном.',
-        services: 'Услуги: вёрстка, интерактивные веб-приложения, фокус на UX и чистом коде. От доведения идеи до работающего продукта до консультаций по интерфейсам.',
-        about: 'Работаю в веб-разработке: от вёрстки до интерактивных приложений. В свободное время пробую новые технологии, читаю про продукт и дизайн-системы. Открыт к совместным проектам.',
-        contacts: 'Контакты: email your@email.com, Telegram, GitHub, LinkedIn. Ссылки есть внизу страницы в разделе «Контакты».',
-        typographyFact: 'Дитер Рамс говорил: «Хороший дизайн — это как можно меньше дизайна». В минимализме типографика и пустое пространство несут основную смысловую нагрузку.'
-      };
-
-      var greetings = ['Привет! Чем могу помочь?', 'Здравствуйте! Спрашивайте что угодно — об мне, услугах или контактах.', 'Привет! Я тут, чтобы рассказать об Антоне и его работе.'];
+      var sendBtn = form.querySelector('button[type="submit"]');
+      var welcomeMessage = 'Здравствуйте! Я консультант на сайте Антона. Могу рассказать о нём, услугах, контактах или о типографике и минимализме. О чём спросите?';
 
       function addMsg(text, isUser) {
         var div = document.createElement('div');
@@ -574,22 +584,25 @@
         messages.scrollTop = messages.scrollHeight;
       }
 
-      function getReply(q) {
-        var lower = (q || '').toLowerCase().trim();
-        if (!lower) return greetings[0];
-        if (/привет|здравств|хай|hello|hi/i.test(lower)) return greetings[Math.floor(Math.random() * greetings.length)];
-        if (/кто ты|кто такой|антон|об тебе|о себе|about|who/i.test(lower)) return knowledge.who;
-        if (/услуг|работ|делаешь|services|чем занимаешь|frontend|интерфейс/i.test(lower)) return knowledge.services;
-        if (/контакт|связаться|написать|email|telegram|github|linkedin/i.test(lower)) return knowledge.contacts;
-        if (/типографик|минимализм|дизайн|цитат|факт|quote|design|minimal/i.test(lower)) return knowledge.typographyFact;
-        if (/портфолио|сайт|проект/i.test(lower)) return 'Это портфолио-визитка Антона. Сайт в тёмной теме в стиле BMW Isle of Man Green, с анимацией частиц. Если нужны контакты или описание услуг — спросите «услуги» или «контакты».';
-        return 'Могу рассказать: кто такой Антон, какие услуги он предлагает, как с ним связаться (контакты), или поделиться фактом о типографике и минимализме. Напишите, например: «услуги» или «контакты».';
+      function addTyping() {
+        var div = document.createElement('div');
+        div.className = 'chat-msg bot chat-typing';
+        div.id = 'chat-typing';
+        div.innerHTML = '<span></span><span></span><span></span>';
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div;
+      }
+
+      function removeTyping() {
+        var el = document.getElementById('chat-typing');
+        if (el) el.remove();
       }
 
       toggle.addEventListener('click', function () {
         panel.classList.toggle('open');
         if (panel.classList.contains('open') && messages.children.length === 0) {
-          addMsg('Привет! Я бот на этом сайте. Спросите об Антоне, его услугах или контактах — или о типографике и минимализме.', false);
+          addMsg(welcomeMessage, false);
         }
         input.focus();
       });
@@ -600,9 +613,24 @@
         if (!text) return;
         addMsg(text, true);
         input.value = '';
-        setTimeout(function () {
-          addMsg(getReply(text), false);
-        }, 400);
+        sendBtn.disabled = true;
+        addTyping();
+
+        fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            removeTyping();
+            addMsg(data.response || 'Нет ответа. Напишите на your@email.com', false);
+          })
+          .catch(function (err) {
+            removeTyping();
+            addMsg('Ошибка связи. Используйте контакты внизу страницы или your@email.com', false);
+          })
+          .then(function () { sendBtn.disabled = false; });
       });
     })();
   </script>
