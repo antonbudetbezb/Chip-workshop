@@ -3,13 +3,13 @@
 <!-- chip-workshop deploy from GitHub main -->
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Антон — Портфолио</title>
   <style>
+    /* Dark theme (default) */
     :root {
       --bg-dark: #0a0e0c;
       --bg-card: rgba(20, 35, 28, 0.6);
-      /* BMW Isle of Man Green inspired */
       --green-600: #0d2818;
       --green-500: #1e4d36;
       --green-400: #2d6b4a;
@@ -18,6 +18,60 @@
       --text: #e2e8f0;
       --text-muted: #94a3b8;
       --border: rgba(45, 107, 74, 0.25);
+      --body-bg: linear-gradient(135deg, #0a0e0c 0%, #0f1812 35%, #132018 70%, #0a0e0c 100%);
+      --hero-gradient: linear-gradient(90deg, #fff 0%, var(--green-300) 100%);
+      --input-bg: rgba(10, 14, 12, 0.8);
+    }
+
+    /* Light theme (system or class) */
+    @media (prefers-color-scheme: light) {
+      :root:not(.theme-dark) {
+        --bg-dark: #f0f4f2;
+        --bg-card: rgba(255, 255, 255, 0.85);
+        --green-600: #1e4d36;
+        --green-500: #2d6b4a;
+        --green-400: #3d8a5c;
+        --green-300: #2d6b4a;
+        --green-glow: rgba(45, 107, 74, 0.2);
+        --text: #1a1f1c;
+        --text-muted: #4a5a52;
+        --border: rgba(45, 107, 74, 0.2);
+        --body-bg: linear-gradient(135deg, #f0f4f2 0%, #e8efe9 35%, #dce8e0 70%, #f0f4f2 100%);
+        --hero-gradient: linear-gradient(90deg, #1a1f1c 0%, var(--green-500) 100%);
+        --input-bg: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    html.theme-light {
+      --bg-dark: #f0f4f2;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --green-600: #1e4d36;
+      --green-500: #2d6b4a;
+      --green-400: #3d8a5c;
+      --green-300: #2d6b4a;
+      --green-glow: rgba(45, 107, 74, 0.2);
+      --text: #1a1f1c;
+      --text-muted: #4a5a52;
+      --border: rgba(45, 107, 74, 0.2);
+      --body-bg: linear-gradient(135deg, #f0f4f2 0%, #e8efe9 35%, #dce8e0 70%, #f0f4f2 100%);
+      --hero-gradient: linear-gradient(90deg, #1a1f1c 0%, var(--green-500) 100%);
+      --input-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    html.theme-dark {
+      --bg-dark: #0a0e0c;
+      --bg-card: rgba(20, 35, 28, 0.6);
+      --green-600: #0d2818;
+      --green-500: #1e4d36;
+      --green-400: #2d6b4a;
+      --green-300: #3d8a5c;
+      --green-glow: rgba(45, 107, 74, 0.35);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(45, 107, 74, 0.25);
+      --body-bg: linear-gradient(135deg, #0a0e0c 0%, #0f1812 35%, #132018 70%, #0a0e0c 100%);
+      --hero-gradient: linear-gradient(90deg, #fff 0%, var(--green-300) 100%);
+      --input-bg: rgba(10, 14, 12, 0.8);
     }
 
     * {
@@ -32,10 +86,11 @@
 
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0a0e0c 0%, #0f1812 35%, #132018 70%, #0a0e0c 100%);
+      background: var(--body-bg);
       min-height: 100vh;
       color: var(--text);
       line-height: 1.6;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
     #particles {
@@ -52,6 +107,8 @@
       max-width: 720px;
       margin: 0 auto;
       padding: 2rem 1.5rem;
+      padding-left: max(1.5rem, env(safe-area-inset-left));
+      padding-right: max(1.5rem, env(safe-area-inset-right));
       position: relative;
       z-index: 1;
     }
@@ -88,7 +145,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 0.25rem;
-      background: linear-gradient(90deg, #fff 0%, var(--green-300) 100%);
+      background: var(--hero-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -135,16 +192,6 @@
     section.contacts {
       padding: 4rem 0 2rem;
     }
-    .site-footer {
-      padding: 2rem 0 3rem;
-      text-align: center;
-      border-top: 1px solid var(--border);
-    }
-    .site-footer p {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      margin: 0;
-    }
 
     section.contacts h2 {
       font-size: 1.25rem;
@@ -155,21 +202,36 @@
       letter-spacing: 0.1em;
     }
 
+    .contact-mosaic {
+      display: block;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1rem;
+      margin-top: 0.5rem;
+    }
+
     .contact-list {
       list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem 1rem;
+    }
+    .contact-list li:first-child,
+    .contact-list li:last-child {
+      grid-column: 1 / -1;
     }
 
     .contact-list a {
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      background: var(--bg-card);
+      min-height: 52px;
+      padding: 0.875rem 1rem;
+      background: rgba(45, 107, 74, 0.12);
       border: 1px solid var(--border);
-      border-radius: 0.5rem;
+      border-radius: 1rem;
       color: var(--green-300);
       text-decoration: none;
       font-size: 0.9375rem;
@@ -219,35 +281,26 @@
       left: -80px;
     }
 
-    /* Entrance animations */
-    .animate-in {
+    /* Scroll-triggered fade-in */
+    .scroll-reveal {
       opacity: 0;
-      transform: translateY(24px);
-      animation: fadeSlideIn 0.7s ease forwards;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-
-    .hero .hero-avatar.animate-in { animation-delay: 0.08s; }
-    .hero .hero-text.animate-in { animation-delay: 0.18s; }
-    .hero .description.animate-in { animation-delay: 0.28s; }
-    .about h2.animate-in { animation-delay: 0.12s; }
-    .about p.animate-in { animation-delay: 0.22s; }
-    .about p.animate-in:nth-of-type(2) { animation-delay: 0.32s; }
-    .about p.animate-in:nth-of-type(3) { animation-delay: 0.42s; }
-    .contacts h2.animate-in { animation-delay: 0.15s; }
-    .contact-list.animate-in { animation-delay: 0.28s; }
-
-    @keyframes fadeSlideIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .scroll-reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
     }
+    .scroll-reveal.reveal-delay-1 { transition-delay: 0.08s; }
+    .scroll-reveal.reveal-delay-2 { transition-delay: 0.16s; }
+    .scroll-reveal.reveal-delay-3 { transition-delay: 0.24s; }
+    .scroll-reveal.reveal-delay-4 { transition-delay: 0.32s; }
 
     /* Chatbot */
     .chat-toggle {
       position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
+      bottom: max(1.5rem, env(safe-area-inset-bottom));
+      right: max(1.5rem, env(safe-area-inset-right));
       width: 56px;
       height: 56px;
       border-radius: 50%;
@@ -267,12 +320,18 @@
       transform: scale(1.05);
       box-shadow: 0 0 32px var(--green-glow);
     }
+    .chat-toggle.is-open {
+      background: var(--green-400);
+      border-color: var(--green-300);
+      box-shadow: 0 0 28px var(--green-glow);
+    }
     .chat-panel {
       position: fixed;
-      bottom: 5rem;
-      right: 1.5rem;
+      bottom: max(5rem, calc(env(safe-area-inset-bottom) + 3.5rem));
+      right: max(1.5rem, env(safe-area-inset-right));
+      left: auto;
       width: 340px;
-      max-width: calc(100vw - 3rem);
+      max-width: calc(100vw - 3rem - env(safe-area-inset-left) - env(safe-area-inset-right));
       height: 420px;
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -347,7 +406,7 @@
     .chat-input {
       flex: 1;
       padding: 0.6rem 0.9rem;
-      background: rgba(10, 14, 12, 0.8);
+      background: var(--input-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text);
@@ -366,17 +425,125 @@
     }
     .chat-send:hover { background: var(--green-400); }
 
-    /* Mobile */
+    /* Theme toggle (iOS-style pill, bottom-left) */
+    .theme-toggle {
+      position: fixed;
+      left: max(1rem, env(safe-area-inset-left));
+      bottom: max(1.5rem, env(safe-area-inset-bottom));
+      z-index: 100;
+      margin: 0;
+      padding: 8px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .theme-toggle-track {
+      position: relative;
+      width: 51px;
+      height: 31px;
+      border-radius: 31px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      padding: 0 3px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .theme-toggle:hover .theme-toggle-track {
+      background: var(--border);
+    }
+    .theme-toggle-thumb {
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: var(--text);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+    .theme-light .theme-toggle-thumb {
+      transform: translateX(20px);
+    }
+    @media (prefers-color-scheme: light) {
+      html:not(.theme-dark):not(.theme-light) .theme-toggle-thumb {
+        transform: translateX(20px);
+      }
+    }
+    .theme-toggle-thumb svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--bg-dark);
+    }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    .theme-light .theme-toggle .icon-sun { display: block; }
+    .theme-light .theme-toggle .icon-moon { display: none; }
+    @media (prefers-color-scheme: light) {
+      html:not(.theme-dark):not(.theme-light) .theme-toggle .icon-sun { display: block; }
+      html:not(.theme-dark):not(.theme-light) .theme-toggle .icon-moon { display: none; }
+    }
+
+    /* Mobile / iPhone */
     @media (max-width: 480px) {
-      .container { padding: 1.5rem 1rem; }
+      .container {
+        padding: 1.5rem max(1rem, env(safe-area-inset-right));
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+      }
       section.hero { min-height: 60vh; padding: 2rem 0; }
       .hero-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .hero-avatar { width: 220px; height: 220px; border-radius: 16px; }
       section.about, section.contacts { padding: 3rem 0; }
-      .contact-list { flex-direction: column; }
-      .contact-list a { justify-content: center; }
-      .chat-panel { bottom: 4.5rem; right: 1rem; left: 1rem; width: auto; height: 380px; }
-      .chat-toggle { bottom: 1rem; right: 1rem; }
+      .contact-mosaic {
+        padding: 1rem;
+        border-radius: 1.25rem;
+      }
+      .contact-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+      .contact-list a {
+        min-height: 48px;
+        padding: 0.875rem 0.75rem;
+        border-radius: 1rem;
+      }
+      .chat-panel {
+        bottom: max(4.5rem, calc(env(safe-area-inset-bottom) + 3rem));
+        right: max(1rem, env(safe-area-inset-right));
+        left: max(1rem, env(safe-area-inset-left));
+        width: auto;
+        height: 380px;
+      }
+      .chat-toggle {
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        right: max(1rem, env(safe-area-inset-right));
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+      }
+      .theme-toggle {
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        left: max(1rem, env(safe-area-inset-left));
+        padding: 6px;
+      }
+      .theme-toggle-track {
+        width: 51px;
+        height: 31px;
+        border-radius: 31px;
+      }
+    }
+    @media (max-width: 360px) {
+      .hero-avatar { width: 180px; height: 180px; }
     }
   </style>
 </head>
@@ -386,42 +553,41 @@
   <div class="orb orb-2" aria-hidden="true"></div>
 
   <main class="container">
-    <section class="hero" id="hero">
+    <section class="hero scroll-reveal" id="hero">
       <div class="hero-top">
-        <img src="avatar.jpg" alt="Антон" class="hero-avatar animate-in" width="280" height="280">
-        <div class="hero-text animate-in">
+        <img src="avatar.jpg" alt="Антон" class="hero-avatar scroll-reveal reveal-delay-1" width="280" height="280">
+        <div class="hero-text scroll-reveal reveal-delay-2">
           <h1>Антон</h1>
           <p class="title">Frontend-разработчик / Дизайнер интерфейсов</p>
         </div>
       </div>
-      <p class="description animate-in">Делаю удобные и быстрые веб-интерфейсы. Интересуюсь типографикой, анимациями и минималистичным дизайном.</p>
+      <p class="description scroll-reveal reveal-delay-3">Делаю удобные и быстрые веб-интерфейсы. Интересуюсь типографикой, анимациями и минималистичным дизайном.</p>
     </section>
 
-    <section class="about" id="about">
-      <h2 class="animate-in">О себе</h2>
-      <p class="animate-in">
+    <section class="about scroll-reveal" id="about">
+      <h2 class="scroll-reveal reveal-delay-1">О себе</h2>
+      <p class="scroll-reveal reveal-delay-2">
         Работаю в веб-разработке: от вёрстки до интерактивных приложений. Фокус на пользовательском опыте и чистом коде. Люблю доводить идеи до работающего продукта.
       </p>
-      <p class="animate-in">
+      <p class="scroll-reveal reveal-delay-3">
         В свободное время пробую новые технологии, читаю про продукт и дизайн-системы. Считаю, что хороший интерфейс не отвлекает, а помогает решать задачи.
       </p>
-      <p class="animate-in">
+      <p class="scroll-reveal reveal-delay-4">
         Открыт к совместным проектам и интересным задачам. Если есть идея или вопрос — напишите.
       </p>
     </section>
 
-    <section class="contacts" id="contacts">
-      <h2 class="animate-in">Контакты</h2>
-      <ul class="contact-list animate-in">
-        <li><a href="mailto:your@email.com" class="email">your@email.com</a></li>
-        <li><a href="https://t.me/your_username" target="_blank" rel="noopener" class="telegram">Telegram</a></li>
-        <li><a href="https://github.com/your_username" target="_blank" rel="noopener" class="github">GitHub</a></li>
-        <li><a href="https://linkedin.com/in/your_username" target="_blank" rel="noopener" class="linkedin">LinkedIn</a></li>
-      </ul>
+    <section class="contacts scroll-reveal" id="contacts">
+      <h2 class="scroll-reveal reveal-delay-1">Контакты</h2>
+      <div class="contact-mosaic scroll-reveal reveal-delay-2">
+        <ul class="contact-list">
+          <li><a href="mailto:your@email.com" class="email">your@email.com</a></li>
+          <li><a href="https://t.me/your_username" target="_blank" rel="noopener" class="telegram">Telegram</a></li>
+          <li><a href="https://github.com/your_username" target="_blank" rel="noopener" class="github">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/your_username" target="_blank" rel="noopener" class="linkedin">LinkedIn</a></li>
+        </ul>
+      </div>
     </section>
-    <footer class="site-footer">
-      <p>— Антон</p>
-    </footer>
   </main>
 
   <div id="chat-panel" class="chat-panel" aria-label="Чат">
@@ -435,8 +601,61 @@
     </div>
   </div>
   <button type="button" class="chat-toggle" id="chat-toggle" aria-label="Открыть чат">💬</button>
+  <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
+    <span class="theme-toggle-track">
+      <span class="theme-toggle-thumb">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-5.4-5.4 5.39 5.39 0 0 1 2.26-4.4C12.92 3.04 12.46 3 12 3z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 18a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6zm0-2a4 4 0 0 0 4-4 4 4 0 0 0-4-4 4 4 0 0 0-4 4 4 4 0 0 0 4 4zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></svg>
+      </span>
+    </span>
+  </button>
 
   <script>
+    (function () {
+      var STORAGE_KEY = 'theme';
+      var saved = localStorage.getItem(STORAGE_KEY);
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+      } else if (saved === 'dark') {
+        document.documentElement.classList.add('theme-dark');
+        document.documentElement.classList.remove('theme-light');
+      } else {
+        document.documentElement.classList.remove('theme-light', 'theme-dark');
+      }
+
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        var root = document.documentElement;
+        var hasLight = root.classList.contains('theme-light');
+        var hasDark = root.classList.contains('theme-dark');
+        var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var showingDark = hasDark || (!hasLight && !hasDark && systemDark);
+        if (showingDark) {
+          root.classList.remove('theme-dark');
+          root.classList.add('theme-light');
+          localStorage.setItem(STORAGE_KEY, 'light');
+        } else {
+          root.classList.remove('theme-light');
+          root.classList.add('theme-dark');
+          localStorage.setItem(STORAGE_KEY, 'dark');
+        }
+      });
+    })();
+
+    (function () {
+      var els = document.querySelectorAll('.scroll-reveal');
+      if (!els.length) return;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
+      els.forEach(function (el) { observer.observe(el); });
+    })();
+
     (function () {
       var canvas = document.getElementById('particles');
       var ctx = canvas.getContext('2d');
@@ -549,8 +768,11 @@
           p.x = Math.max(0, Math.min(canvas.width, p.x));
           p.y = Math.max(0, Math.min(canvas.height, p.y));
 
-          var alpha = 0.45 + 0.35 * Math.random();
-          ctx.fillStyle = 'rgba(' + green.r + ',' + green.g + ',' + green.b + ',' + alpha + ')';
+          var root = document.documentElement;
+          var isLight = root.classList.contains('theme-light') || (!root.classList.contains('theme-dark') && !root.classList.contains('theme-light') && window.matchMedia('(prefers-color-scheme: light)').matches);
+          var useGreen = isLight ? { r: 45, g: 107, b: 74 } : green;
+          var alpha = isLight ? (0.2 + 0.2 * Math.random()) : (0.45 + 0.35 * Math.random());
+          ctx.fillStyle = 'rgba(' + useGreen.r + ',' + useGreen.g + ',' + useGreen.b + ',' + alpha + ')';
           ctx.beginPath();
           ctx.arc(p.x, p.y, 0.68, 0, Math.PI * 2);
           ctx.fill();
@@ -615,6 +837,7 @@
 
       toggle.addEventListener('click', function () {
         panel.classList.toggle('open');
+        toggle.classList.toggle('is-open', panel.classList.contains('open'));
         if (panel.classList.contains('open') && messages.children.length === 0) {
           addMsg(welcomeMessage, false);
         }

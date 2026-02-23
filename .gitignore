@@ -34,3 +34,4 @@ yarn-error.log*
 
 # Optional: keep avatar if you prefer to ignore (uncomment to not track)
 # avatar.jpg
+.vercel
